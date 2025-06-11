@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Запрошення: Ксенія & Артем</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Marcellus&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; font-family: 'Marcellus', serif; background: #000; overflow: hidden; }
+
+    video.bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      filter: brightness(0.95);
+      transform: scale(1.05);
+    }
+
+    .overlay-gradient {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.3));
+    }
+
+    .particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .initials-screen {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3;
+      animation: fadeOut 2s ease-out 3.5s forwards;
+    }
+
+    .initials {
+      font-family: 'Great Vibes', cursive;
+      font-size: 11em;
+      color: gold;
+      letter-spacing: 0.2em;
+      opacity: 0;
+      animation: splitIn 2.5s ease forwards;
+      text-shadow: 0 0 40px rgba(255,215,0,0.8);
+    }
+
+    @keyframes splitIn {
+      0% { opacity: 0; transform: scale(0.3); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+    .overlay {
+      opacity: 0;
+      visibility: hidden;
+      animation: fadeInOverlay 1.5s ease 5s forwards;
+      position: relative;
+      z-index: 4;
+      padding: 40px 20px;
+      overflow-y: auto;
+      height: 100vh;
+      color: white;
+    }
+
+    @keyframes fadeInOverlay { to { opacity: 1; visibility: visible; } }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+      animation: fadeIn 2s ease;
+    }
+
+    .hero h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 6em;
+      color: gold;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 1);
+      animation: slideUp 2.5s ease;
+    }
+
+    .hero h2 {
+      font-weight: 300;
+      font-size: 1.8em;
+      animation: fadeIn 3.5s ease;
+    }
+
+    .section {
+      max-width: 850px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 35px 50px;
+      border-radius: 35px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.7);
+      color: white;
+      animation: fadeInUp 2s ease;
+    }
+
+    .section.event-details p {
+      font-size: 1.4em;
+      line-height: 1.7em;
+    }
+
+    h3 {
+      color: gold;
+      font-size: 2.5em;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px rgba(255,215,0,0.7);
+    }
+
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: none;
+      border-radius: 25px;
+    }
+
+    #timer {
+      font-size: 2em;
+      font-weight: 600;
+      color: gold;
+      text-align: center;
+      text-shadow: 0 0 10px rgba(255,215,0,0.7);
+    }
+
+    .decor-line {
+      text-align: center;
+      font-size: 1.8em;
+      margin: 10px 0 30px;
+      color: pink;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .calendar {
+      display: flex;
+      justify-content: center;
+      margin: 35px auto;
+    }
+
+    .calendar img {
+      width: 550px;
+      max-width: 100%;
+      border-radius: 30px;
+      box-shadow: 0 0 50px rgba(255,255,255,0.5);
+    }
+
+    .rsvp-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .rsvp-buttons button {
+      padding: 22px 45px;
+      font-size: 1.4em;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      background: linear-gradient(45deg, gold, #b8860b);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: all 0.5s ease;
+    }
+
+    .rsvp-buttons button:hover {
+      transform: scale(1.15) rotate(-1deg);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { 0% {transform: translateY(50px); opacity: 0;} 100% {transform: translateY(0); opacity: 1;} }
+
+    @media(max-width: 768px){
+      .hero h1 { font-size: 4em; }
+      .section { margin: 20px 10px; padding: 25px; }
+      .calendar img { width: 100%; }
+      .section.event-details p { font-size: 1.2em; }
+      .rsvp-buttons button { padding: 18px 35px; font-size: 1.2em; }
+    }
+  </style>
+</head>
+<body>
+
+<video autoplay muted loop playsinline class="bg-video">
+  <source src="204803-925552205_large.mp4" type="video/mp4" />
+  Ваш браузер не підтримує відео.
+</video>
+
+<audio autoplay loop>
+  <source src="music.mp3" type="audio/mpeg" />
+</audio>
+
+<div class="overlay-gradient"></div>
+
+<canvas id="particles" class="particles"></canvas>
+
+<div class="initials-screen">
+  <div class="initials">К | А</div>
+</div>
+
+<div class="overlay">
+  <div class="hero">
+    <h1>Ксенія & Артем</h1>
+    <h2>Запрошуємо вас на святкування нашого весілля</h2>
+  </div>
+
+  <div class="calendar">
+    <img src="900a25e5-179c-474a-beee-16e89dc478c1.png" alt="Календар" />
+  </div>
+
+  <div class="section event-details">
+    <h3>Деталі події</h3>
+    <p><strong>Дата:</strong> 12 серпня 2025 року</p>
+    <p><strong>Церемонія:</strong> 10:00</p>
+    <p><strong>Банкет:</strong> 11:30 у ресторані "Рушничок", Черкаси</p>
+  </div>
+
+  <div class="section">
+    <h3>Локація</h3>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2600.046303511271!2d32.0711909!3d49.4445923!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40d14b7b35e337b3%3A0xc47243b727022893!2z0KXQutCw0YDQvdC40YbQsA!5e0!3m2!1suk!2sua!4v1718123456789" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+
+  <div class="section">
+    <h3>До великого дня залишилось:</h3>
+    <div class="decor-line">❤️ 💛 💖 💛 ❤️</div>
+    <div id="timer">Завантаження...</div>
+  </div>
+
+  <div class="section">
+    <h3>Ваш RSVP</h3>
+    <div class="rsvp-buttons">
+      <button onclick="alert('Дякуємо, ми вас чекаємо!')">Я обов'язково буду ✅</button>
+      <button onclick="alert('Шкода, що не зможете бути з нами')">На жаль, не зможу ❌</button>
+      <button onclick="alert('Розуміємо, напишіть, будь ласка, нам')">Можливо, напишу ✉️</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const countdownDate = new Date("August 12, 2025 00:00:00").getTime();
+const timerEl = document.getElementById("timer");
+
+function updateTimer() {
+  const now = new Date().getTime();
+  const diff = countdownDate - now;
+
+  if (diff < 0) {
+    timerEl.textContent = "Свято триває!";
+    clearInterval(timerInterval);
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  timerEl.textContent = `${days} днів ${hours} год ${minutes} хв ${seconds} с`;
+}
+
+const timerInterval = setInterval(updateTimer, 1000);
+updateTimer();
+
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+function createParticles() {
+  for (let i = 0; i < 120; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2 + 1,
+      alpha: Math.random() * 0.7 + 0.3,
+      speed: Math.random() * 0.5 + 0.2
+    });
+  }
+}
+createParticles();
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (let p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 215, 0, ${p.alpha})`;
+    ctx.fill();
+    p.y += p.speed;
+    if (p.y > canvas.height) {
+      p.y = 0;
+      p.x = Math.random() * canvas.width;
+    }
+  }
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>

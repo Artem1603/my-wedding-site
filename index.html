@@ -6,6 +6,7 @@
   <title>Запрошення: Ксенія & Артем</title>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&family=Marcellus&display=swap" rel="stylesheet" />
   <style>
+    /* Твої стилі залишаю без змін */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; font-family: 'Marcellus', serif; background: #000; overflow: hidden; }
 
@@ -261,80 +262,57 @@
   </div>
 
   <div class="section">
-    <h3>Ваш RSVP</h3>
+    <h3>Ваша відповідь на запрошення</h3>
     <div class="rsvp-buttons">
-      <button onclick="alert('Дякуємо, ми вас чекаємо!')">Я обов'язково буду ✅</button>
-      <button onclick="alert('Шкода, що не зможете бути з нами')">На жаль, не зможу ❌</button>
-      <button onclick="alert('Розуміємо, напишіть, будь ласка, нам')">Можливо, напишу ✉️</button>
+      <button onclick="sendRSVP('Так, я буду')">Я обов'язково буду ✅</button>
+      <button onclick="sendRSVP('Ні, не зможу')">На жаль, не зможу ❌</button>
+      <button onclick="sendRSVP('Можливо, напишу')">Можливо, напишу ✉️</button>
     </div>
   </div>
 </div>
 
-<script>
-const countdownDate = new Date("August 12, 2025 00:00:00").getTime();
-const timerEl = document.getElementById("timer");
+<!-- Підключення EmailJS SDK -->
+<script type="text/javascript" src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
+<script type="text/javascript">
+  (function() {
+    emailjs.init("QVKvDAMrv_dGMUA4H"); // Встав сюди свій EmailJS User ID
+  })();
 
-function updateTimer() {
-  const now = new Date().getTime();
-  const diff = countdownDate - now;
-
-  if (diff < 0) {
-    timerEl.textContent = "Свято триває!";
-    clearInterval(timerInterval);
-    return;
-  }
-
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  const minutes = Math.floor((diff / (1000 * 60)) % 60);
-  const seconds = Math.floor((diff / 1000) % 60);
-
-  timerEl.textContent = `${days} днів ${hours} год ${minutes} хв ${seconds} с`;
-}
-
-const timerInterval = setInterval(updateTimer, 1000);
-updateTimer();
-
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let particles = [];
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-function createParticles() {
-  for (let i = 0; i < 120; i++) {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      radius: Math.random() * 2 + 1,
-      alpha: Math.random() * 0.7 + 0.3,
-      speed: Math.random() * 0.5 + 0.2
+  function sendRSVP(answer) {
+    emailjs.send("service_ip7pf14", "template_n0jcop5", {
+      rsvp_answer: answer,
+      event_name: "Весілля Ксенії та Артема"
+    })
+    .then(function(response) {
+      alert("Дякуємо! Ваша відповідь надіслана.");
+    }, function(error) {
+      alert("Сталася помилка. Спробуйте будь ласка пізніше.");
     });
   }
-}
-createParticles();
 
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let p of particles) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255, 215, 0, ${p.alpha})`;
-    ctx.fill();
-    p.y += p.speed;
-    if (p.y > canvas.height) {
-      p.y = 0;
-      p.x = Math.random() * canvas.width;
+  // Таймер до весілля
+  function updateTimer() {
+    const weddingDate = new Date("2025-08-15T10:00:00");
+    const now = new Date();
+    const diff = weddingDate - now;
+
+    if (diff <= 0) {
+      document.getElementById("timer").textContent = "Весілля почалося!";
+      clearInterval(timerInterval);
+      return;
     }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("timer").textContent =
+      `${days} днів ${hours} годин ${minutes} хвилин ${seconds} секунд`;
   }
-  requestAnimationFrame(animate);
-}
-animate();
+
+  updateTimer();
+  const timerInterval = setInterval(updateTimer, 1000);
 </script>
 
 </body>
